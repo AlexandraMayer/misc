@@ -1,7 +1,12 @@
 #include <iostream>
 #include <fstream>
+#include <typeinfo>
+#include "exercise.h"
+
+int h = 42;
 
 int main() {
+    /*
     std::cout << "Enter two numbers:" << std::endl;
     int v1 = 0, v2 = 0;
     std::cin >> v1 >> v2;
@@ -79,7 +84,113 @@ int main() {
    std::ofstream myfile;
    myfile.open ("example.txt");
    myfile << "Writing this to a file.\n";
-   myfile.close();
+   myfile.close(); 
+*/
+    /*
+    unsigned u = 10, u2 = 42;
+    std::cout << u2 - u << std::endl;
+    std::cout << u - u2 << std::endl;
 
-   return 0;
+    int i = 10, i2 =42;
+    std::cout << i2 - i << std::endl;
+    std::cout << i - i2 << std::endl;
+
+    std::cout << i - u << std::endl;
+    std::cout << u - i << std::endl;
+
+    int month = 07;
+    std::cout << month << std::endl;
+
+    std::string s = "Who goes with F\145rgus?\012";
+
+    std::cout << s;
+
+    auto ex27 = 3.14e1L;
+    std::cout << ex27  << std::endl;
+    std::cout << typeid(ex27).name()  << std::endl;
+
+    auto ex27b = 3.14L;
+    std::cout << typeid(ex27b).name()  << std::endl;
+
+    std::cout << "\062\t\115\n" << std::endl;
+
+    int e = 3.14;
+    std::cout << e << std::endl;
+
+    double salary, wage = 9999.99;
+
+    int h = 100;
+    int k = h;
+
+    std::cout << k << std::endl;
+
+    int l = 100, sum = 0;
+    for(int l = 0; l != 10; l++) {
+        sum += l;
+    }
+    std::cout << l << " " << sum << std::endl;
+    int in = 0, &r1 = in; double d = 0, &r2 = d;
+    r2 = 3.14159;
+    std::cout << d << std::endl;
+    r2 = r1;
+    std::cout << d << std::endl;
+    in = r2;
+    std::cout << r1 << std::endl;
+    r1 = d;
+    std::cout << d << std::endl;
+
+    int ip, &ri = ip;
+    ip = 5; ri = 10;
+    std::cout << ip << " " << ri << std::endl;
+    int *point;
+    int ptr = 12;
+    point = &ptr;
+    std::cout << (*point) << std::endl;
+    *point = 20;
+
+    std::cout << ptr << std::endl;
+    */
+/*
+    int i = 42;
+    std::cout << i << std::endl;
+    int *p1 = &i;
+    std::cout << i << std::endl;
+    std::cout << *p1 << std::endl;
+    *p1 = *p1 * *p1;
+    std::cout << i << std::endl;
+    std::cout << *p1 << std::endl;
+*/
+    //const int buf;
+    int cnt = 0;
+    const int sz = cnt;
+    ++cnt; //++sz;
+
+    std::cout <<"Das hier ist ein  Hi vertikalen Tabulator \v Hello World"<< std::endl;
+
+    std::cout << "int: " << sizeof(int) << std::endl;
+
+    primes();
+
+    int first;
+    int last;
+
+    std::cout << "Please Type two numbers" << std::endl;
+    std::cin >> first >> last;
+    givePrimes(first,last);
+
+    double menge,preis,rabatt,skonto,versand;
+    std::cout << "\nBitte Menge eingeben" << std::endl;
+    std::cin >> menge;
+    std::cout << "\nBitte Preis eingeben" << std::endl;
+    std::cin >> preis;
+    std::cout << "\nBitte Rabatt in % eingeben" << std::endl;
+    std::cin >> rabatt;
+    std::cout << "\nBitte skonto in % eingeben" << std::endl;
+    std::cin >> skonto;
+    std::cout << "\nBitte Versandkosten eingeben" << std::endl;
+    std::cin >> versand;
+    std::cout << std::endl;
+    kalkshema(menge,preis,rabatt,skonto,versand);
+
+    return 0;
 }

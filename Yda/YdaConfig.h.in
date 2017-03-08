@@ -1,0 +1,2 @@
+#define SaveYda_VERSION_MAJOR @SaveYda_VERSION_MAJOR@
+#define SaveYda_VERSION_MINOR @SaveYda_VERSION_MINOR@

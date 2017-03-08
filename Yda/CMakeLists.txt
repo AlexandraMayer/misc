@@ -17,4 +17,4 @@ add_executable(YDASave ${CLASS_SRCS})
 target_link_libraries(YDASave yaml-cpp)
 
 install(TARGETS YDASave DESTINATION bin)
-install(FILES "${PROJECT_BINARY_DIR}/TutorialConfig.h" DESTINATION include)
+install(FILES "${PROJECT_BINARY_DIR}/YdaConfig.h" DESTINATION include)
