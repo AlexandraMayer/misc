@@ -2,6 +2,9 @@
 #include <fstream>
 #include <typeinfo>
 #include "exercise.h"
+#include <map>
+#include <cstring>
+#include <algorithm>
 
 int h = 42;
 
@@ -178,6 +181,7 @@ int main() {
     std::cin >> first >> last;
     givePrimes(first,last);
 
+    /*
     double menge,preis,rabatt,skonto,versand;
     std::cout << "\nBitte Menge eingeben" << std::endl;
     std::cin >> menge;
@@ -191,6 +195,95 @@ int main() {
     std::cin >> versand;
     std::cout << std::endl;
     kalkshema(menge,preis,rabatt,skonto,versand);
+*/
+    int menge, preis;
+    std::cout << "\nBitte Menge eingeben" << std::endl;
+    std::cin >> menge;
+    std::cout << "\nBitte Preis eingeben" << std::endl;
+    std::cin >> preis;
+
+    std::cout << "Gesamtpreis: ";
+    if(menge > 10) {
+        std::cout << ((preis)*95)/100 << " \244" << std::endl;
+    } else if (menge > 50) {
+        std::cout << (preis*95)/100 << " \244" << std::endl;
+    } else {
+        std::cout << (preis) << " \244" << std::endl;
+    }
+
+    std::string m_filename, word ,line;
+    char x;
+    std::map<std::string,int> words;
+    /*
+    std::cout << "\nBitte Name der Datei eingeben" << std::endl;
+    std::cin >> m_filename;
+    std::ifstream infile(m_filename);
+    if(infile.fail()){
+       std::cerr << "Could not open file." << std::endl;
+       return 1;
+    }
+    int n;
+    infile >>( n);
+    std::cout << n;
+
+    for(int i = 0; i <=  n; i++){
+        std::getline(infile, line);
+        std::cout << line << std::endl;
+    }
+
+    /*
+
+    while(std::getline(fin,line)) {
+        if(words.find(word) != words.end()) {
+            (words.find(word)->second) ++;
+        } else if (word.length() > 5) {
+            words[word] = 1;
+        }
+    }
+    fin.close();
+    for(auto it = words.begin(); it != words.end(); ++it ) {
+        std::cout << it->first << "\t\t\t" << it->second << std::endl;
+    }
+
+    */
+    int i = 0;
+    std::ifstream fin;
+    //std::map<std::string,int> words;
+    char falseChars[9];
+    falseChars[0] = '.';
+    falseChars[1] = ',';
+    falseChars[2] = '?';
+    falseChars[3] = '\'';
+    falseChars[4] = '\"';
+    falseChars[5] = '!';
+    falseChars[6] = '(';
+    falseChars[7] = ')';
+    falseChars[8] = ':';
+
+    fin.open("Sherlock.txt");
+    if(!fin.is_open()) std::cerr << "Could not open file." << std::endl;
+    while (fin >> word) {
+        i++;
+        if(word.size() > 10) {
+            std::cout << h << std::endl;
+            for (int i= 0; i < 9; i++) {
+                word.erase(std::remove(word.begin(), word.end(), falseChars[i]),word.end());
+            }
+            std::cout << word << std::endl;
+            if(word.size() > 4 && (words.find(word) == words.end())) {
+                words[word] = 1;
+            } else if (word.size() > 10) {
+                words[word] += 1;
+            }
+        }
+
+    }
+
+
+    fin.close();
+    for(auto it = words.begin(); it != words.end(); ++it ) {
+        std::cout << it->first << "\t\t" << it->second << std::endl;
+    }
 
     return 0;
 }

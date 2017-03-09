@@ -47,10 +47,10 @@ void kalkshema(double menge,double preis,double rabatt,double skonto,double vers
     double skontogeld = (skonto*zielpreis)/100;
     double bareinkauf = zielpreis-skontogeld;
     std::cout << "Listenpreis:\t\t\t\t" << listpreis << " EUR" << std::endl;
-    std::cout << "-Rabatt " << rabatt <<" %\t\t\t\t" << rabattgeld  << "EUR" << std::endl;
+    std::cout << "-Rabatt " << rabatt <<" %\t\t\t\t" << rabattgeld  << " EUR" << std::endl;
     std::cout << "= Zieleinkaufspreis\t\t\t" <<  zielpreis << " EUR" << std::endl;
-    std::cout << "-Skonto " << skonto <<" %\t\t\t\t" << skontogeld  << "EUR" << std::endl;
+    std::cout << "-Skonto " << skonto <<" %\t\t\t\t" << skontogeld  << " EUR" << std::endl;
     std::cout << "= Bareinkaufspreis\t\t\t" <<  bareinkauf << " EUR" << std::endl;
     std::cout << "+ Versandkosten\t\t\t\t" <<  versandkosten << " EUR" << std::endl;
-    std::cout << "= Bezugspreis (Einstandspreis)\t\t" <<  bareinkauf + versandkosten << "EUR" << std::endl;
+    std::cout << "= Bezugspreis (Einstandspreis)\t\t" <<  bareinkauf + versandkosten << " EUR" << std::endl;
 }
