@@ -5,8 +5,15 @@
 #include <map>
 #include <cstring>
 #include <algorithm>
+#include <vector>
+#include <string>
+#include <cctype>
 
 int h = 42;
+
+char Lower(char c) {
+    return std::tolower(static_cast<unsigned char> (c));
+}
 
 int main() {
     /*
@@ -176,7 +183,7 @@ int main() {
 
     int first;
     int last;
-
+/*
     std::cout << "Please Type two numbers" << std::endl;
     std::cin >> first >> last;
     givePrimes(first,last);
@@ -197,6 +204,7 @@ int main() {
     kalkshema(menge,preis,rabatt,skonto,versand);
 */
     int menge, preis;
+    /*
     std::cout << "\nBitte Menge eingeben" << std::endl;
     std::cin >> menge;
     std::cout << "\nBitte Preis eingeben" << std::endl;
@@ -246,6 +254,8 @@ int main() {
     }
 
     */
+    std::string word;
+    std::map<std::string,int> words;
     int i = 0;
     std::ifstream fin;
     //std::map<std::string,int> words;
@@ -260,19 +270,32 @@ int main() {
     falseChars[7] = ')';
     falseChars[8] = ':';
 
+    std::vector<std::string> uniqueWords;
+    uniqueWords.push_back("which");
+    uniqueWords.push_back("holmes");
+    uniqueWords.push_back("there");
+    uniqueWords.push_back("could");
+    uniqueWords.push_back("photograph");
+
     fin.open("Sherlock.txt");
     if(!fin.is_open()) std::cerr << "Could not open file." << std::endl;
     while (fin >> word) {
         i++;
-        if(word.size() > 10) {
+        if(word.size() > 4) {
             std::cout << h << std::endl;
             for (int i= 0; i < 9; i++) {
                 word.erase(std::remove(word.begin(), word.end(), falseChars[i]),word.end());
             }
             std::cout << word << std::endl;
-            if(word.size() > 4 && (words.find(word) == words.end())) {
-                words[word] = 1;
-            } else if (word.size() > 10) {
+            std::transform(word.begin(),word.end(),word.begin(),Lower);
+            if(words.find(word) == words.end()) {;
+                for(auto it = uniqueWords.begin(); it != uniqueWords.end(); it++) {
+                   if(*(it) == word) {
+                       words[word] = 1;
+                       std::cout << "if fehler" << std::endl;
+                   }
+                }
+            } else if (word.size() > 4) {
                 words[word] += 1;
             }
         }
@@ -281,9 +304,13 @@ int main() {
 
 
     fin.close();
+    std::map<int, std::string> reversed;
     for(auto it = words.begin(); it != words.end(); ++it ) {
-        std::cout << it->first << "\t\t" << it->second << std::endl;
+        reversed[it->second] = it->first;
     }
 
+    for(auto it = reversed.rbegin(); it != reversed.rend(); ++it ) {
+        std::cout << it->first << "\t\t" << it->second << std::endl;
+    }
     return 0;
 }

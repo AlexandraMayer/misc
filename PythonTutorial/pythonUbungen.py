@@ -24,10 +24,15 @@ class Lecturer(Person):
         super(Lecturer, self).__init__(name,age)
 
 #######################################################################################
-class Detector(object):
+class Component(object):
+    
+    name = None
+
+
+class Detector(Component):
     
     Id = None
-    name = None
+    #name = None
     
     def __init__(self,Id,name):
         self.Id = Id
@@ -35,13 +40,20 @@ class Detector(object):
         
  #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
  
-class Instrument(object):
+class Instrument(Component):
      
-     name = None
-     detectors = None
+     #name = None
+     detectors = []
+     
+     def __init__(self,name,detectors):
+         self.name = name 
+         self.detectors = detectors
+         
+     def printTree(self):
+         for i in range(len(self.detectors)):
+             print "Detector nr.",(i+1),"Id", self.detectors[i].Id,"name:",self.detectors[i].name
      
      
- 
 ########################################################################################
 
 
@@ -72,4 +84,11 @@ print 'Lecturer name:',person_l.name
  #######################################################################################
  
 det1 = Detector(1,"bank1_1")
+det2 = Detector(3,"bank1_2")
 print 'DetectorId:',det1.Id,'and Detector name:',det1.name 
+
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+dets = [det1,det1,det2]
+inst1 = Instrument('MyInst',dets)
+inst1.printTree()
