@@ -1,6 +1,11 @@
 from mantid.api import *
 from mantid.kernel import*
 
+import ruamel.yaml
+
+from ruamel.yaml.comments import CommentedMap
+
+
 import yaml
 import math
 
@@ -8,6 +13,9 @@ class SaveYDAPy(PythonAlgorithm):
     
     def category(self):
         return 'DataHandling'   
+        
+    def name(self):
+        return 'SaveYDAPy'
     
     def PyInit(self):
         
@@ -17,15 +25,19 @@ class SaveYDAPy(PythonAlgorithm):
         
         self.declareProperty(MatrixWorkspaceProperty("InputWorkspace","",validator=wsValidators,direction=Direction.Input),doc="Workspace to save")
         self.declareProperty(FileProperty(name="Filename",defaultValue="",action=FileAction.Save,extensions=""),"The name to use when writing the file")
-        
+        #self.setPropertyValue("Inputworkspace",ws)
+        #self.setPropertyValue("Filename",file)
         
     def getBinCenters(self,ax,bin):
         
-        ax = None
+        #ax = None
         bin = []
         
-        for i in range (1,ax.length()):
-            bin.append((ax.getValue(i)+ax.getValue(i-1))/2)
+        for i in range(1,ax.size):
+                bin.append((ax[i]+ax[i-1])/2)     
+            
+        
+        return bin
         
         
     def validateInputs(self):
@@ -35,31 +47,31 @@ class SaveYDAPy(PythonAlgorithm):
         #allowedUnits = ['q']
         ws = self.getProperty("InputWorkspace").value
         
-        allowedUnit = 'q'
+        allowedUnit = 'MomentumTransfer'
         ax = ws.getAxis(1)
         
-        if not ax.isSpectra() and axis.unit().capiton() != allowedUnit:
+        if not ax.isSpectra() and ax.getUnit().unitID() != allowedUnit:
             issues["InputWorkspace"] = "Y axis is not 'Spectrum Axis' or 'Momentum Transfer'"
         
         if isinstance(ws,IEventWorkspace):
             issues["InputWorkspace"] = "The InputWorkspace must be a Workspace2D"
 
         return issues
-        
+
         
     def PyExec(self):
         
         ws = mtd[self.getPropertyValue('InputWorkspace')]
         filename = self.getProperty("Filename").value
         
-        file = open(filename,"w")
+        #file = open(filename,"w")
         
         run = ws.getRun()
         ax = ws.getAxis(1)
         nHist = ws.getNumberHistograms()
         
         metadata = dict()
-        
+       
         metadata["format"] = "yaml/frida 2.0"
         metadata["type"] = "gerneric tabular data"
         
@@ -105,7 +117,7 @@ class SaveYDAPy(PythonAlgorithm):
         x["unit"] = "meV"
         
         xc["x"] =  x
-        
+     
         yc = dict()
         y = dict()
         
@@ -149,44 +161,83 @@ class SaveYDAPy(PythonAlgorithm):
             for i in range(ax.length()):
                 bin.append(ax.getValue())
         else:
-            bin = getBinCenters(ax,bin).bin
-            
+            bin = self.getBinCenters(ax,bin).bin
+       
         for i in range(nHist):
             
-            ys = ws.y(i)
+            #ys = ws.dataY(i)
+            ys = ws.dataY(0)
+            test = ax.extractValues()
+            #self.log().debug(str(ws.readX(0)[0]))
+            #self.log().debug(str(ys[0]))
+            #self.log().debug(str(test[0]))
+            
             
             yv = []
             xcenters = []
-            
-            xcenters= getBinCenters(ws.getAxis(0), xcenters)
-            
-            for j in range(ys.size()):
+  
+            for j in range(ys.size):
                 yv.append(ys[j])
             
+            xax = ws.readX(i)
+            #self.log().debug(str(xax[1]))
+            xcenters = self.getBinCenters(xax,xcenters)
+            
+            
+           # self.log().debug(str(xcenters[0]))
+            
+            
+            slicethis = CommentedMap()
+            
+            val = dict()
+            slicethis["j"] =  i
+            val["val"] = bin[i]
+            slicethis["z"] =  dict( val = bin[i])
+            slicethis ["x"] = str(xcenters)
+            slicethis["y"] =  str(yv)
+            
+            slices.append(slicethis)
+
         
-            slicethis = dict()
-            slicethis["j"] =
-            slicethis["z"] =
-            slicethis
-            
-            slices.append()
-            
-   
-            
-        
-        data = dict()
+        data = CommentedMap()
         
         data["Meta"] = metadata
         data["History"]  = hist
-        data["RPar"] = rpar
         data["Coord"] = coord
-        data["Test"] = bin
+        data["RPar"] = rpar
         
-        print yaml.dump(data,default_flow_style=False)
+        data["Slices"] = slices
         
+        with open(filename,'w') as outfile:
+            #yaml.dump(data,outfile,default_flow_style=False)
         
-        file.write('')
-        
+            ruamel.yaml.round_trip_dump(data,outfile)   
+  
         
         
 AlgorithmFactory.subscribe(SaveYDAPy) 
+
+import numpy as np
+
+datax = np.linspace(0.0, 324.0,100 )
+datay = np.zeros((100))
+
+ws = CreateWorkspace(DataX=datax, DataY=datay, DataE=np.sqrt(datay), NSpec=10, UnitX="DeltaE")
+
+print ws.getAxis(1).getUnit().caption()
+
+LoadInstrument(ws,False,InstrumentName="TOFTOF")
+AddSampleLog(ws,"proposal_number","3")
+AddSampleLog(ws, "proposal_title", "A")
+AddSampleLog(ws,"experiment_team","Team name")
+AddSampleLog(ws,"temperature","234.56", LogUnit="F")
+AddSampleLog(ws,"Ei","1.23",LogUnit="meV")
+
+path = os.path.expanduser("~/testpythonyda.txt")
+
+SaveYDAPy(ws)
+
+print ws.blocksize()
+
+with open(path,'r') as f:
+    print f.read()
