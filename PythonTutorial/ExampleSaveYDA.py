@@ -1,4 +1,6 @@
 from mantid.api import *
+from mantid.api import *
+from mantid.api import *
 from mantid.kernel import*
 
 import ruamel.yaml
