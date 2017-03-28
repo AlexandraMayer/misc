@@ -1,4 +1,5 @@
 path = os.path.expanduser("~/testpythonyda.yaml")
+print path
 
 #t0c = time.clock()
 #ws = LoadYDA(path)

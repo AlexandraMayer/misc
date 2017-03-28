@@ -1,6 +1,6 @@
 import numpy as np
 
-xbins = 1000
+xbins = 2000
 ybins = 2000
 
 datax = np.linspace(0.0, 324.0, xbins+1)
